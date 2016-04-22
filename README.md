@@ -1,6 +1,8 @@
 # Cronometer
 
-Sample app developed as an example of the React Native framework.
+Sample app developed as an example of the React Native framework. It simulates a simple cronometer.
+
+![alt tag](https://github.com/IgnacioMV/Cronometer/blob/master/sc.png)
 
 ## Installation
 Check the official Facebook's React Native repository to find how to install the required dependencies.
