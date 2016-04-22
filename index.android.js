@@ -20,7 +20,7 @@ class Crono extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nextOp: 'Start',
+      play: false,
       time: 0,
       x: 0,
       y: 0,
@@ -75,10 +75,10 @@ class Crono extends Component {
     if(this.state.time == 0) {
       return;
     }
-    var nextOp = (this.state.nextOp == "Start") ? "Stop" : "Start";
-    this.setState({nextOp: nextOp});
+    var play = (this.state.play == false) ? true : false;
+    this.setState({play: play});
     console.log("123");
-    if(nextOp == "Stop") {
+    if(play == true) {
       setTimeout(this.startCrono.bind(this));
     } else {
       setTimeout(this.stopCrono.bind(this));
@@ -91,7 +91,7 @@ class Crono extends Component {
       console.log(this.state.time);
       this.setState({time: this.state.time-1});
       if(this.state.time == 0) {
-        this.setState({nextOp: "Start"});
+        this.setState({play: false});
         Alert.alert("DING DING DING");
         setTimeout(this.stopCrono.bind(this));
       }
@@ -158,7 +158,9 @@ class Crono extends Component {
           <TouchableOpacity 
             style={styles.nextOpButton}
             onPress={this.onNextOpButtonPressed.bind(this)}>
-            <Text style={styles.nextOpButtonText}>{this.state.nextOp}</Text>
+            <Image source={(this.state.play) ? require('./pause.png') : require('./play.png')}
+              style={styles.nextOpButtonImage}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -209,15 +211,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextOpButton: {
-    borderColor: 'gray', 
-    borderWidth: 1,
-    padding: 5,
     margin: 5,
-    borderRadius: 5,
   },
   nextOpButtonText: {
     fontSize: 20,
   },
+  nextOpButtonImage: {
+    width: 75,
+    height: 75,
+  }
 });
 
 AppRegistry.registerComponent('Crono', () => Crono);
