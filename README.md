@@ -8,7 +8,7 @@ Sample app developed as an example of the React Native framework. It simulates a
 Check the official Facebook's React Native repository to find how to install the required dependencies.
 
 ## Running the app
-* `git clone https://github.com/IgnacioMV/Cronomete`
+* `git clone https://github.com/IgnacioMV/Cronometer`
 * `cd Cronometer && npm install`
 * `react-native start`
 
