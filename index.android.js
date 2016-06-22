@@ -1,11 +1,13 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Cronometer
+ * Ignacio Martín Velasco TFG
+ * 2016
+ * https://github.com/IgnacioMV/Cronometer
+ @flow
  */
-
-import React, {
+import React, { Component } from 'react';
+import {
   AppRegistry,
-  Component,
   StyleSheet,
   Text,
   View,
@@ -17,6 +19,7 @@ import React, {
 const timer = require('react-native-timer');
 
 class Crono extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,69 +32,43 @@ class Crono extends Component {
     }
   }
 
-  componentDidMount() { 
-    setTimeout(this.measureCronoImage.bind(this)); 
+  componentDidMount() {
+    setTimeout(this.measureCronoImage.bind(this));
   }
 
   measureCronoImage() {
     this.refs.cronoImage.measureInWindow((a, b, width, height) => {
-      console.log(a);
-      console.log(b);
-      console.log(width);
-      console.log(height);
-      this.setState({ 
+      this.setState({
         x: a,
         y: b,
-        w: width, 
+        w: width,
         h: height
     })});
   }
 
   onSubtractPressed() {
-    if (this.state.time == 0) {
-      return;
-    } else {
-      this.setState({time: this.state.time-1});
-    }
-    this.refs.cronoImage.measureInWindow((a, b, width, height) => this.setState({ 
-      x: a,
-      y: b,
-      w: width, 
-      h: height})
-    );
+    var time = this.state.time;
+    (time > 0) ? this.setState({time: time-1}) : null;
   }
 
   onAddPressed() {
     this.setState({time: this.state.time+1});
-    this.refs.cronoImage.measureInWindow((a, b, width, height) => this.setState({ 
-      x: a,
-      y: b,
-      w: width, 
-      h: height})
-    );
   }
 
   onNextOpButtonPressed() {
-    if(this.state.time == 0) {
+    if(this.state.time <= 0) {
       return;
     }
-    var play = (this.state.play == false) ? true : false;
+    var play = !this.state.play;
     this.setState({play: play});
-    console.log("123");
-    if(play == true) {
-      setTimeout(this.startCrono.bind(this));
-    } else {
-      setTimeout(this.stopCrono.bind(this));
-    }
+    (play == true) ? this.startCrono() : this.stopCrono();
   }
 
   startCrono() {
-    console.log("startCrono");
     timer.setInterval('crono', () => {
-      console.log(this.state.time);
       this.setState({time: this.state.time-1});
-      if(this.state.time == 0) {
-        this.setState({play: false});
+      if(this.state.time <= 0) {
+        this.setState({time: 0, play: false});
         Alert.alert("DING DING DING");
         setTimeout(this.stopCrono.bind(this));
       }
@@ -99,17 +76,22 @@ class Crono extends Component {
   }
 
   stopCrono() {
-    console.log("stopCrono");
     timer.clearInterval('crono');
   }
 
   render() {
+    //Preparation and container
     var time = (this.state.time < 10) ? "0"+this.state.time+"s" : this.state.time+"s";
     return (
+
       <View style={styles.container}>
+
+  {/* Title */}
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Temporizador</Text>
         </View>
+
+  {/* Add and subtract buttons and seconds remaining */}
         <View style={styles.bar}>
           <TouchableOpacity style={styles.barButton}
             onPress={this.onSubtractPressed.bind(this)}>
@@ -121,27 +103,33 @@ class Crono extends Component {
             <Text style={styles.buttonText}>+</Text>
           </TouchableOpacity>
         </View>
+
+  {/* Clock sphere */}
         <View style={styles.cronoContainer}>
-          <Image 
+          <Image
             ref="cronoImage"
             style={styles.cronoImage}
-            source={require('./crono.png')}/>
+            source={require('./img/crono.png')}/>
         </View>
+
+  {/* Clochand container */}
         <View style={{
-          top: this.state.y-24+this.state.h/5,
+          top: this.state.y+this.state.h/5,
           left: this.state.x+this.state.w/2-10,
           position: 'absolute',
           transform: [
              {rotate: (this.state.time*6)+'deg'}
           ]
         }}>
+
+  {/* Clockhand */}
           <View style={{
             width: 20,
             height: this.state.h*3/5,
             borderWidth: 1,
             borderTopLeftRadius: 5,
             borderTopRightRadius: 5,
-            borderColor: '#111111', 
+            borderColor: '#111111',
          }}
          />
          <View style={{
@@ -153,16 +141,20 @@ class Crono extends Component {
             position: 'absolute'
          }}
          />
+
+  {/* Start/stop button */}
         </View>
         <View style={styles.bottomBar}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.nextOpButton}
             onPress={this.onNextOpButtonPressed.bind(this)}>
-            <Image source={(this.state.play) ? require('./pause.png') : require('./play.png')}
+            <Image source={(this.state.play) ? require('./img/pause.png') : require('./img/play.png')}
               style={styles.nextOpButtonImage}
             />
           </TouchableOpacity>
         </View>
+
+  {/* End container */}
       </View>
     );
   }
@@ -183,7 +175,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   barButton: {
-    borderColor: 'gray', 
+    borderColor: 'gray',
     borderWidth: 1,
     height: 20,
     width: 20,
