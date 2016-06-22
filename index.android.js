@@ -114,7 +114,7 @@ class Crono extends Component {
 
   {/* Clochand container */}
         <View style={{
-          top: this.state.y+this.state.h/5,
+          top: this.state.y+this.state.h/5-24,
           left: this.state.x+this.state.w/2-10,
           position: 'absolute',
           transform: [
